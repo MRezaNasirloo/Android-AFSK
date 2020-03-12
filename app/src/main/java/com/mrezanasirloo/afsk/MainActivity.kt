@@ -13,7 +13,7 @@ class MainActivity : AppCompatActivity() {
 
         val stream = resources.openRawResource(R.raw.file_1)
         val header = WaveHeader.read(stream)
-        val message = SignalDecoder(header, 3200).decode(stream)
+        val message = SignalDecoder(header, 3200).decode(stream.apply { reset() })
 
         textView.movementMethod = ScrollingMovementMethod()
         textView.text = message.read()

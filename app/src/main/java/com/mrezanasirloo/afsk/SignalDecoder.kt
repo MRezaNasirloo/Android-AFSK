@@ -18,7 +18,6 @@ class SignalDecoder(
 
     fun decode(inputStream: InputStream): EncodedMessage {
         inputStream.use { stream ->
-            stream.reset()
             stream.skip(WaveHeader.HEADER_SIZE)
             val bufferSize = header.subChunk2Size
             val data = ByteArray(bufferSize)

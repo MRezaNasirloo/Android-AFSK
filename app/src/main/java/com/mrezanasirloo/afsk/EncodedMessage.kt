@@ -20,7 +20,13 @@ data class Message(private val _byte: BitSet) {
 
 class ToneData {
     val data: ArrayList<Message> = ArrayList(30) // 30 messages
-    lateinit var checksum: Message
+    private lateinit var checksum: Message
+    val isValid: Boolean
+        get() {
+            var sum = 0
+            data.forEach { sum += it.byte.toInt() }
+            return sum % 255 == checksum.byte.toInt()
+        }
 
     val filled: Boolean
         get() = data.size == 30 && this::checksum.isInitialized
@@ -43,10 +49,12 @@ class EncodedMessage {
     private val id: Array<Message?> = Array(2) { null } // 2 messages
     private val data: ArrayList<ToneData> = ArrayList(64) // (30 + 1) x 64 = 1984  messages
     private var endId: Message? = null // 1 messages
+    val isValid: Boolean
+        get() = data.all { it.isValid }
 
     private var state = State.LEAD
 
-    fun add(bits: BitSet) {
+    internal fun add(bits: BitSet) {
         if (bits.isEmpty || state == State.END) return
         val message = Message(bits.clone() as BitSet)
 
