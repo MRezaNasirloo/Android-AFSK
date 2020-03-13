@@ -8,8 +8,8 @@ class SignalDecoder(
     frameLength: Int
 ) {
 
-    private val zeroIdentifier = header.sampleRate / frameLength * 2
-    private val oneIdentifier = header.sampleRate / frameLength
+    private val zeroIdentifier = header.sampleRate / frameLength * 2 - 1
+    private val oneIdentifier = header.sampleRate / frameLength - 1
     private val message = EncodedMessage()
     private var lastSignal = STATE.Silent
     private var frameCounter = 0
@@ -61,11 +61,10 @@ class SignalDecoder(
             } else {
                 if (frameCounter >= zeroIdentifier) {
                     bits.set(bitCounter++, false)
-                    frameCounter = 0
                 } else if (frameCounter >= oneIdentifier) {
                     bits.set(bitCounter++, true)
-                    frameCounter = 0
                 }
+                frameCounter = 0
             }
             lastSignal = currentSignal
 

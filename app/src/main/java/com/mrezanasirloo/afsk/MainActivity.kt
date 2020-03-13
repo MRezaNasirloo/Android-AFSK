@@ -11,7 +11,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val stream = resources.openRawResource(R.raw.file_1)
+        val stream = resources.openRawResource(R.raw.file_3)
         val header = WaveHeader.read(stream)
         val message = SignalDecoder(header, 3200).decode(stream.apply { reset() })
 
